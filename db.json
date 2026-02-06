@@ -1,14 +1,19 @@
 {
   "posts": [
     {
-      "id": 1,
+      "id": "1",
       "title": "Post 1",
       "content": "Ovo je prvi post"
     },
     {
-      "id": 2,
+      "id": "2",
       "title": "Post 2",
       "content": "Ovo je drugi post"
+    },
+    {
+      "id": "8b6f",
+      "title": "Treći post",
+      "content": "Ovo je treći post dodat preko admin panela i JSON servera."
     }
   ]
 }

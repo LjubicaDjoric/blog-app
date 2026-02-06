@@ -5,32 +5,33 @@ import { API_URL } from "../api";
 
 function PostDetails() {
   const { id } = useParams();
-
   const [post, setPost] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
   useEffect(() => {
-    const loadPost = async () => {
+    async function fetchPost() {
       try {
-        setLoading(true);
         setError("");
-
         const res = await axios.get(`${API_URL}/posts/${id}`);
         setPost(res.data);
-      } catch (e) {
-        setError("Post nije pronađen ili je došlo do greške.");
-      } finally {
-        setLoading(false);
+      } catch (err) {
+        setError("Post nije pronađen ili server nije pokrenut.");
       }
-    };
+    }
 
-    loadPost();
+    fetchPost();
   }, [id]);
 
-  if (loading) return <p>Učitavanje...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!post) return <p>Nema podataka.</p>;
+  if (error) {
+    return (
+      <div>
+        <p style={{ color: "red" }}>{error}</p>
+        <Link to="/posts">← Nazad na listu</Link>
+      </div>
+    );
+  }
+
+  if (!post) return <p>Učitavanje...</p>;
 
   return (
     <div>
@@ -38,7 +39,7 @@ function PostDetails() {
       <p>{post.content}</p>
 
       <br />
-      <Link to="/posts">← Nazad na sve postove</Link>
+      <Link to="/posts">← Nazad na listu</Link>
     </div>
   );
 }
