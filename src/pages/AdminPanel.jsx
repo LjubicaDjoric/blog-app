@@ -1,42 +1,63 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { API_URL } from "../api";
 
 function AdminPanel() {
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [msg, setMsg] = useState("");
+  const [message, setMessage] = useState("");
+  const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
 
+  // Učitaj sve postove
+  const loadPosts = async () => {
+    const res = await axios.get(`${API_URL}/posts`);
+    setPosts(res.data);
+  };
+
+  useEffect(() => {
+    loadPosts();
+  }, []);
+
+  // Dodavanje novog posta
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMsg("");
+    setMessage("");
 
     if (!title.trim() || !content.trim()) {
-      setMsg("Popuni i naslov i sadržaj.");
+      setMessage("❌ Popuni i naslov i sadržaj.");
       return;
     }
 
     try {
       setLoading(true);
 
-      // Ako šalješ id kao broj, json-server može i sam da dodeli id (najčešće).
-      const newPost = {
+      await axios.post(`${API_URL}/posts`, {
         title: title.trim(),
         content: content.trim(),
-      };
-
-      await axios.post(`${API_URL}/posts`, newPost);
+      });
 
       setTitle("");
       setContent("");
-      setMsg("✅ Post je dodat!");
+      setMessage("✅ Post je uspešno dodat!");
+      loadPosts();
     } catch (err) {
       console.error(err);
-      setMsg("❌ Greška pri dodavanju posta. Proveri da li radi json-server.");
+      setMessage("❌ Greška pri dodavanju posta.");
     } finally {
       setLoading(false);
     }
+  };
+
+  // Brisanje posta
+  const handleDelete = async (id) => {
+    const confirmDelete = window.confirm(
+      "Da li si sigurna da želiš da obrišeš post?"
+    );
+    if (!confirmDelete) return;
+
+    await axios.delete(`${API_URL}/posts/${id}`);
+    loadPosts();
   };
 
   return (
@@ -51,7 +72,7 @@ function AdminPanel() {
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             style={{ width: "100%", padding: 8 }}
-            placeholder="Unesi naslov..."
+            placeholder="Unesi naslov"
           />
         </div>
 
@@ -61,7 +82,7 @@ function AdminPanel() {
             value={content}
             onChange={(e) => setContent(e.target.value)}
             style={{ width: "100%", padding: 8, minHeight: 120 }}
-            placeholder="Unesi sadržaj..."
+            placeholder="Unesi sadržaj"
           />
         </div>
 
@@ -69,8 +90,23 @@ function AdminPanel() {
           {loading ? "Dodajem..." : "Dodaj post"}
         </button>
 
-        {msg && <p style={{ marginTop: 10 }}>{msg}</p>}
+        {message && <p style={{ marginTop: 10 }}>{message}</p>}
       </form>
+
+      <hr />
+
+      <h2>Svi postovi</h2>
+
+      <ul>
+        {posts.map((post) => (
+          <li key={post.id}>
+            {post.title}{" "}
+            <button onClick={() => handleDelete(post.id)}>
+              Obriši
+            </button>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
