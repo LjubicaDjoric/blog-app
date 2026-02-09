@@ -6,6 +6,9 @@ import Posts from "./pages/Posts";
 import PostDetails from "./pages/PostDetails";
 import AdminPanel from "./pages/AdminPanel";
 import EditPost from "./pages/EditPost";
+import Login from "./pages/Login";
+
+import ProtectedRoute from "./components/ProtectedRoute";
 
 export default function App() {
   return (
@@ -16,8 +19,25 @@ export default function App() {
         <Route path="/" element={<Home />} />
         <Route path="/posts" element={<Posts />} />
         <Route path="/posts/:id" element={<PostDetails />} />
-        <Route path="/admin" element={<AdminPanel />} />
-        <Route path="/admin/edit/:id" element={<EditPost />} />
+
+        <Route path="/login" element={<Login />} />
+
+        <Route
+          path="/admin"
+          element={
+            <ProtectedRoute role="admin">
+              <AdminPanel />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/edit/:id"
+          element={
+            <ProtectedRoute role="admin">
+              <EditPost />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </>
   );

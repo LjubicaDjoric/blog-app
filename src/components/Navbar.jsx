@@ -1,11 +1,40 @@
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
-export default function Navbar() {
+export default function Login() {
+  const navigate = useNavigate();
+
+  const loginAsUser = () => {
+    localStorage.setItem("token", "demo-token");
+    localStorage.setItem("role", "user");
+    navigate("/posts");
+  };
+
+  const loginAsAdmin = () => {
+    localStorage.setItem("token", "demo-token");
+    localStorage.setItem("role", "admin");
+    navigate("/admin");
+  };
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    navigate("/");
+  };
+
   return (
-    <nav style={{ padding: "20px", borderBottom: "1px solid #ccc" }}>
-      <Link to="/" style={{ marginRight: 10 }}>Home</Link>
-      <Link to="/posts" style={{ marginRight: 10 }}>Posts</Link>
-      <Link to="/admin">Admin</Link>
-    </nav>
+    <div style={{ padding: 20 }}>
+      <h1>Login</h1>
+
+      <p>Demo login (bez pravog backenda):</p>
+
+      <button onClick={loginAsUser}>Login kao User</button>
+      <button onClick={loginAsAdmin} style={{ marginLeft: 10 }}>
+        Login kao Admin
+      </button>
+
+      <div style={{ marginTop: 20 }}>
+        <button onClick={logout}>Logout</button>
+      </div>
+    </div>
   );
 }
