@@ -14,6 +14,11 @@
       "id": "8b6f",
       "title": "Treći post",
       "content": "Ovo je treći post dodat preko admin panela i JSON servera."
+    },
+    {
+      "title": "Test post",
+      "content": "Ovo je test posta dodat preko admin panela.",
+      "id": "592f"
     }
   ]
 }

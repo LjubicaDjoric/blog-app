@@ -5,6 +5,7 @@ import Home from "./pages/Home";
 import Posts from "./pages/Posts";
 import PostDetails from "./pages/PostDetails";
 import AdminPanel from "./pages/AdminPanel";
+import EditPost from "./pages/EditPost";
 
 export default function App() {
   return (
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/posts" element={<Posts />} />
         <Route path="/posts/:id" element={<PostDetails />} />
         <Route path="/admin" element={<AdminPanel />} />
+        <Route path="/admin/edit/:id" element={<EditPost />} />
       </Routes>
     </>
   );

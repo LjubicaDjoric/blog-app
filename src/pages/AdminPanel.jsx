@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { API_URL } from "../api";
 
 function AdminPanel() {
@@ -99,10 +100,18 @@ function AdminPanel() {
 
       <ul>
         {posts.map((post) => (
-          <li key={post.id}>
-            {post.title}{" "}
+          <li key={post.id} style={{ marginBottom: 8 }}>
+            <b>{post.title}</b>{" "}
+            
+            <Link
+              to={`/admin/edit/${post.id}`}
+              style={{ marginRight: 10 }}
+            >
+              ✏️ Edit
+            </Link>
+
             <button onClick={() => handleDelete(post.id)}>
-              Obriši
+              🗑 Obriši
             </button>
           </li>
         ))}
